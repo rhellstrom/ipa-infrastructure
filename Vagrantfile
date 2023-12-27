@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
     # General settings
     config.vm.box = "rockylinux/9"
     config.vm.synced_folder ".", "/vagrant", disabled: true
-
+    config.ssh.insert_key = false
 
     # FreeIPA 
     config.vm.define "ipa-server" do |ipa|
