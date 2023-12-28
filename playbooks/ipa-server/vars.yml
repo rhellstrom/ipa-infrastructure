@@ -1,0 +1,9 @@
+---
+ipaserver_domain: ipa.test
+ipaserver_realm: IPA.TEST
+ipaserver_setup_dns: yes
+ipaserver_no_forwarders: true
+ipaadmin_password: adminpass
+ipadm_password: managerpass
+ipaserver_install_packages: no
+ipaserver_setup_firewalld: no

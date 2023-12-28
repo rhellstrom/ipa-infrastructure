@@ -1,0 +1,27 @@
+---
+- name: Install and configure prerequisites for freeIPA
+  hosts: ipa-server
+  become: true
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Update packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Add self to /etc/hosts
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "192.168.60.4 ipa-server.ipa.test ipa-server"
+        state: present
+
+- name: Playbook to configure IPA server
+  hosts: ipa-server
+  become: true
+  vars_files:
+    - vars.yml
+
+  roles:
+    - role: freeipa.ansible_freeipa.ipaserver
+      state: present
