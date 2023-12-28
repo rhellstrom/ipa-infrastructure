@@ -48,9 +48,9 @@
       notify: reload firewalld
 
   handlers:
-    - name: reload firewalld
+    - name: enable firewalld
       ansible.posix.firewalld:
-        state: restarted
+        state: present
         enabled: true
 
 
