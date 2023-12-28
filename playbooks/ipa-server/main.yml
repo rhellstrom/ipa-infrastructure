@@ -16,6 +16,44 @@
         line: "192.168.60.4 ipa-server.ipa.test ipa-server"
         state: present
 
+- name: Configure firewalld
+  hosts: ipa-server
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Allow freeIPA services
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop: "{{ freeipa_services }}"
+      notify: reload firewalld
+
+    - name: Allow specific TCP ports
+      ansible.posix.firewalld:
+        port: "{{ item }}/tcp"
+        permanent: true
+        state: enabled
+      loop: "{{ tcp_ports }}"
+      notify: reload firewalld
+
+    - name: Allow specific UDP ports
+      ansible.posix.firewalld:
+        port: "{{ item }}/udp"
+        permanent: true
+        state: enabled
+      loop: "{{ udp_ports }}"
+      notify: reload firewalld
+
+  handlers:
+    - name: reload firewalld
+      ansible.posix.firewalld:
+        state: restarted
+        enabled: true
+
+
 - name: Playbook to configure IPA server
   hosts: ipa-server
   become: true
