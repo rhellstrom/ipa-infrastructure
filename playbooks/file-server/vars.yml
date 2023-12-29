@@ -1,0 +1,10 @@
+---
+ipaadmin_password: adminpass
+ipaadmin_principal: admin
+ipaclient_domain: ipa.test
+ipaclient_realm: IPA.TEST
+ipaclient_servers: 192.168.60.4
+ipaclient_dns_servers: 192.168.60.4
+ipaclient_force_join: yes
+ipaclient_force: yes
+ipaclient_no_ntp: yes

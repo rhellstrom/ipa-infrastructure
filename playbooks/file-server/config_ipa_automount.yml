@@ -1,0 +1,21 @@
+---
+- name: Add Automountmap and Automountkey
+  hosts: file-server
+  become: true
+  tasks:
+    - name: Add Automountmap
+      freeipa.ansible_freeipa.ipaautomountmap:
+        ipaadmin_password: adminpass
+        automountlocation: "default"
+        name: "auto.home"  
+        mount: "/home"
+        state: present
+
+    - name: Add automountkey
+      freeipa.ansible_freeipa.ipaautomountkey:
+        ipaadmin_password: adminpass
+        location: "default"
+        mapname: "auto.home"
+        key: "*"
+        info: "file-server.ipa.test:/export/home/&"
+        state: present

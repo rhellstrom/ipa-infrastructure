@@ -1,0 +1,35 @@
+---
+- name: Add file-server as an IPA service nfs/file-server.ipa.test
+  hosts: file-server
+  tasks:
+
+    - name: Make sure service is present
+      freeipa.ansible_freeipa.ipaservice:
+        ipaadmin_password: adminpass
+        name: nfs/file-server.ipa.test
+        state: present
+
+# Why is there no module for this? 
+# Use shell rather than command in order to keep our kerberos ticket
+- name: Obtain Kerberos ticket and retrieve keytab
+  hosts: file-server
+  become: true
+  tasks:
+    - name: Run kinit command to obtain Kerberos ticket
+      ansible.builtin.shell: echo 'adminpass' | kinit admin
+      register: kinit_result
+
+    - name: Check if kinit command succeeded
+      ansible.builtin.debug:
+        msg: "Kinit failed!"
+      when: kinit_result.rc != 0
+
+    - name: Retrieve Kerberos keytab using ipa-getkeytab
+      ansible.builtin.shell: ipa-getkeytab -s ipa-server.ipa.test -p nfs/file-server.ipa.test -k /etc/krb5.keytab
+      when: kinit_result.rc == 0 
+
+    - name: Run ipa-client-automount
+      ansible.builtin.shell: ipa-client-automount --unattended
+      when: kinit_result.rc == 0
+      register: ipa_client_automount_output
+      failed_when: ipa_client_automount_output.rc != 0 and ipa_client_automount_output.rc != 3

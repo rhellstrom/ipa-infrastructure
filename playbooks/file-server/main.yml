@@ -3,39 +3,8 @@
   hosts: file-server
   become: true
 
-  tasks:
-    - name: Update packages
-      ansible.builtin.dnf:
-        name: "*"
-        state: latest
-
-    - name: Add IPA-server to /etc/resolv.conf
-      ansible.builtin.lineinfile:
-        path: /etc/resolv.conf
-        line: "nameserver 192.168.60.4"
-        insertafter: '^search lan ipa\.test.*$'
-        state: present
-
-
-# Firewall services:
-# firewall-cmd --add-service=nfs --add-service=mountd --add-service=rpc-bind --permanent
-# Check that nfs-utils are present
-# Install and configure ipa-client
-# Get a ticket
-# add service: ipa service-add nfs/file-server.ipa.test
-# Retrieve kerberos keytab:
-# ipa-getkeytab -s ipa-server.ipa.test -p nfs/file-server.ipa.test -k /etc/krb5.keytab
-
-# ipa-client-automount
-
-# Setup /export/home and add it to /etc/exports
-# exportfs -ra
-# Make sure nfs-server is enabled
-
-# Setup automount
-# ipa automountmap-add-indirect default auto.home --mount=/home
-# ipa automountkey-add default auto.home --key "*" --info "file-server.ipa.test:/export/home/&"
-
-# Test by adding a user and creating a home dir in /export/home
-# How do we auto create home folders? oddjob_mkhomedir permission hell
-# 
+- ansible.builtin.import_playbook: update_configure_system.yml
+- ansible.builtin.import_playbook: install_ipa_client.yml
+- ansible.builtin.import_playbook: config_ipa_nfs.yml
+- ansible.builtin.import_playbook: config_nfs.yml
+- ansible.builtin.import_playbook: config_ipa_automount.yml

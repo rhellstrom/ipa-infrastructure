@@ -1,0 +1,28 @@
+- name: Configure NFS Server
+  hosts: file-server
+  become: true
+  tasks:
+    - name: Check that nfs-utils are present
+      ansible.builtin.dnf:
+        name: nfs-utils
+        state: present
+
+    - name: Create directory /export/home
+      ansible.builtin.file:
+        path: /export/home
+        state: directory
+
+    - name: Add NFS export entry to /etc/exports
+      ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "/export/home *(rw,sec=krb5:krb5i:krb5p)"
+        state: present
+
+    - name: Refresh NFS exports
+      ansible.builtin.shell: exportfs -ra
+
+    - name: Enable and start NFS server
+      ansible.builtin.service:
+        name: nfs-server
+        enabled: yes
+        state: started

@@ -1,0 +1,38 @@
+---
+- name: Install and configure prerequisites for freeIPA
+  hosts: file-server
+  become: true
+
+  tasks:
+    - name: Update packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Make nameserver changes persist
+      ansible.builtin.lineinfile:
+        path: /etc/NetworkManager/NetworkManager.conf
+        insertafter: '^\\[main\\]'
+        line: 'dns=none'
+        state: present
+
+    - name: Add IPA-server to /etc/resolv.conf
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.60.4"
+        insertafter: '^search ipa\.test.*$'
+        state: present
+
+- name: Add services to firewalld
+  hosts: file-server
+  become: true
+  tasks:
+    - name: Add services to firewall
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      with_items:
+        - nfs
+        - mountd
+        - rpc-bind
