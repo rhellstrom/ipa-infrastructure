@@ -23,13 +23,17 @@
     - vars.yml
 
   tasks:
+    - name: Start Firewalld service
+      ansible.builtin.systemd:
+        name: firewalld
+        state: started
+
     - name: Allow freeIPA services
       ansible.posix.firewalld:
         service: "{{ item }}"
         permanent: true
         state: enabled
       loop: "{{ freeipa_services }}"
-      notify: reload firewalld
 
     - name: Allow specific TCP ports
       ansible.posix.firewalld:
@@ -37,7 +41,6 @@
         permanent: true
         state: enabled
       loop: "{{ tcp_ports }}"
-      notify: reload firewalld
 
     - name: Allow specific UDP ports
       ansible.posix.firewalld:
@@ -45,13 +48,10 @@
         permanent: true
         state: enabled
       loop: "{{ udp_ports }}"
-      notify: reload firewalld
 
-  handlers:
     - name: enable firewalld
       ansible.posix.firewalld:
-        state: present
-        enabled: true
+        state: enabled
 
 
 - name: Playbook to configure IPA server
