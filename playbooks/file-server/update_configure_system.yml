@@ -9,12 +9,12 @@
         name: "*"
         state: latest
 
-    - name: Make nameserver changes persist
-      ansible.builtin.lineinfile:
-        path: /etc/NetworkManager/NetworkManager.conf
-        insertafter: '^\\[main\\]'
-        line: 'dns=none'
-        state: present
+    - name: Make changes to /etc/resolv persist
+      ansible.builtin.copy:
+        content: |
+          [main]
+          dns=none
+        dest: /etc/NetworkManager/conf.d/90-dns-none.conf
 
     - name: Add IPA-server to /etc/resolv.conf
       ansible.builtin.lineinfile:
