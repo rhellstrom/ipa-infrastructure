@@ -9,13 +9,6 @@
         name: "*"
         state: latest
 
-    - name: Make changes to /etc/resolv persist
-      ansible.builtin.copy:
-        content: |
-          [main]
-          dns=none
-        dest: /etc/NetworkManager/conf.d/90-dns-none.conf
-
     - name: Add IPA-server to /etc/resolv.conf
       ansible.builtin.lineinfile:
         path: /etc/resolv.conf
