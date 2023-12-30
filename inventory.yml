@@ -7,15 +7,13 @@ all:
     #   ansible_host: 192.168.60.5
 
     file-server:
-      ansible_host: 127.0.0.1
-      ansible_port: 2200
+      ansible_host: 192.168.60.6
 
-    # web-server:
-    #   ansible_host: 192.168.60.7
+    db-server:
+      ansible_host: 192.168.60.7
 
     test-user:
-      ansible_host: 127.0.0.1
-      ansible_port: 2201
+      ansible_host: 192.168.60.8
 
 
   vars:
