@@ -13,7 +13,7 @@
       ansible.builtin.lineinfile:
         path: /etc/resolv.conf
         line: "nameserver 192.168.60.4"
-        insertafter: '^search ipa\.test.*$'
+        insertafter: '^search lan ipa\.test.*$'
         state: present
 
 - name: Add services to firewalld
