@@ -1,0 +1,28 @@
+---
+- name: Configure GSSAPI authentication for PSQL connections
+  hosts: db-server
+  become: true
+  tasks:
+    - name: Configure keytab and listen adresses for PSQL
+      ansible.builtin.blockinfile:
+        path: /var/lib/pgsql/data/postgresql.conf
+        block: |
+          listen_addresses = '*'
+          krb_server_keyfile = '/var/lib/pgsql/data/pg.keytab'
+
+    - name: Set authentication for local connections to GSSAPI
+      ansible.builtin.replace:
+        path: /var/lib/pgsql/data/pg_hba.conf
+        regexp: '^host\s+all\s+all\s+127\.0\.0\.1/32\s+ident$'
+        replace: 'host	all         	all         	127.0.0.1/32        	gss include_realm=0'
+
+    - name: Set GSSAPI authentication for private network
+      ansible.builtin.lineinfile:
+        path: /var/lib/pgsql/data/pg_hba.conf
+        line: 'host	all         	all         	192.168.60.0/24     	gss include_realm=0'
+        insertafter: EOF
+
+    - name: Restart PostgreSQL
+      ansible.builtin.systemd:
+        name: postgresql
+        state: reloaded

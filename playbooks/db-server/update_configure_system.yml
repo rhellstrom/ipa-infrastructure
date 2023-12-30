@@ -1,0 +1,33 @@
+---
+- name: Install and configure prerequisites for freeIPA
+  hosts: db-server
+  become: true
+
+  tasks:
+    - name: Update packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Add IPA-server to /etc/resolv.conf
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.60.4"
+        insertafter: '^search lan ipa\.test.*$'
+        state: present
+
+- name: Enable and configure firewalld
+  hosts: file-server
+  become: true
+  tasks:
+    - name: Add services to firewall
+      ansible.posix.firewalld:
+        service: postgresql
+        permanent: true
+        state: enabled
+
+    - name: Enable and start firewalld service
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: true
