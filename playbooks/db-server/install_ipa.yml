@@ -1,34 +1,41 @@
+# ---
+# - name: Install and configure freeIPA client
+#   hosts: db-server
+#   become: true
+#   tasks:
+#     - name: Download ipa-client package
+#       ansible.builtin.dnf:
+#         name: ipa-client
+#         state: present
+
+#     - name: Run unattended installation through the shell
+#       ansible.builtin.command: >
+#         ipa-client-install \
+#         --password adminpass \
+#         --principal admin \
+#         --domain ipa.test \
+#         --server ipa-server.ipa.test \
+#         --force-join \
+#         --unattended
+#       register: ipa_client_install_output
+#       ignore_errors: true
+#       failed_when: ipa_client_install_output.rc != 0 and ipa_client_install_output.rc != 3
+
+#     - ansible.builtin.debug:
+#         msg: "Installation successful"
+#       when: ipa_client_install_output.rc == 0
+
+#     - ansible.builtin.debug:
+#         msg: "Already installed and configured"
+#       when: ipa_client_install_output.rc == 3
+
+#     - ansible.builtin.debug:
+#         var: ipa_client_install_output
+#       when: ipa_client_install_output.rc != 0 and ipa_client_install_output.rc != 3
+
 ---
-- name: Install and configure freeIPA client
+- name: Example playbook using freeipa_client role
   hosts: db-server
   become: true
-  tasks:
-    - name: Download ipa-client package
-      ansible.builtin.dnf:
-        name: ipa-client
-        state: present
-
-    - name: Run unattended installation through the shell
-      ansible.builtin.command: >
-        ipa-client-install \
-        --password adminpass \
-        --principal admin \
-        --domain ipa.test \
-        --server ipa-server.ipa.test \
-        --force-join \
-        --unattended
-      register: ipa_client_install_output
-      ignore_errors: true
-      failed_when: ipa_client_install_output.rc != 0 and ipa_client_install_output.rc != 3
-
-    - ansible.builtin.debug:
-        msg: "Installation successful"
-      when: ipa_client_install_output.rc == 0
-
-    - ansible.builtin.debug:
-        msg: "Already installed and configured"
-      when: ipa_client_install_output.rc == 3
-
-    - ansible.builtin.debug:
-        var: ipa_client_install_output
-      when: ipa_client_install_output.rc != 0 and ipa_client_install_output.rc != 3
+  roles:
+    - role: freeipa_client

@@ -5,6 +5,5 @@
 
 - ansible.builtin.import_playbook: update_configure_system.yml
 - ansible.builtin.import_playbook: install_psql.yml
-- ansible.builtin.import_playbook: install_ipa.yml
-- ansible.builtin.import_playbook: config_ipa_db.yml
+- ansible.builtin.import_playbook: ipa-client.yml
 - ansible.builtin.import_playbook: config_psql.yml
