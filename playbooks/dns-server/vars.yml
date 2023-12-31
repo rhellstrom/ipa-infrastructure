@@ -1,0 +1,6 @@
+---
+dns_listen_ipv4: "192.168.60.5"
+dns_forwarders:
+  - "8.8.8.8"
+  - "8.8.4.4"
+dns_allow_range: "192.168.60.0/24"

@@ -1,0 +1,44 @@
+---
+- name: Install and configure BIND DNS server for forwarding
+  hosts: dns-server
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks: 
+    - name: Update the system
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Install BIND
+      ansible.builtin.dnf:
+        name: 
+          - bind
+          - bind-utils
+        state: present
+
+    - name: Add services to firewall
+      ansible.posix.firewalld:
+        service: dns
+        permanent: true
+        state: enabled
+
+    - name: Enable and start firewalld service
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Copy named.conf template
+      ansible.builtin.template:
+        src: named.conf.j2
+        dest: /etc/named.conf
+      notify: restart named service
+
+  handlers:
+    - name: restart named service
+      ansible.builtin.service:
+        name: named
+        state: restarted
+        enabled: true
