@@ -1,12 +1,13 @@
 ---
 #freeIPA vars
-
 ipaserver_domain: ipa.test
 ipaserver_realm: IPA.TEST
-ipaserver_setup_dns: yes
-ipaserver_no_forwarders: true
 ipaadmin_password: adminpass
 ipadm_password: managerpass
+
+#freeIPA dns
+ipaserver_setup_dns: yes
+ipaserver_forwarders: 192.168.60.5
 
 
 freeipa_services:

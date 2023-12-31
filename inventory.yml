@@ -3,8 +3,8 @@ all:
     ipa-server:
       ansible_host: 192.168.60.4
       
-    # dns-server:
-    #   ansible_host: 192.168.60.5
+    dns-server:
+      ansible_host: 192.168.60.5
 
     file-server:
       ansible_host: 192.168.60.6

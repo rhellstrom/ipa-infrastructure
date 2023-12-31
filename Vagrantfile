@@ -17,16 +17,16 @@ Vagrant.configure("2") do |config|
       end
     end
 
-    # # DNS with BIND
-    # config.vm.define "dns-server" do |dns|
-    #   dns.vm.hostname = "dns-server.ipa.test"
-    #   dns.vm.network "private_network", ip: "192.168.60.5"
+    # DNS with BIND
+    config.vm.define "dns-server" do |dns|
+      dns.vm.hostname = "dns-server.ipa.test"
+      dns.vm.network "private_network", ip: "192.168.60.5"
 
-    #   dns.vm.provider "virtualbox" do |vb|
-    #     vb.memory = 1024
-    #     vb.cpus = 1
-    #   end
-    # end
+      dns.vm.provider "virtualbox" do |vb|
+        vb.memory = 1024
+        vb.cpus = 1
+      end
+    end
   
     # File Server with NFS
     config.vm.define "file-server" do |file|
