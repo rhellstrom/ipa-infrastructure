@@ -1,0 +1,5 @@
+---
+ipa_client_password: adminpass
+ipa_client_principal: admin
+ipa_client_domain: ipa.test
+ipa_server_hostname: ipa-server.ipa.test
