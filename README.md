@@ -8,13 +8,13 @@ The goal was to set up a very basic infrastructure capable of managing identitie
 * A Host for running freeIPA identity management with integrated DNS for internal hostname resolution
 * A 'kerberized' NFS Server configured to automount and host user home directories
 * A database server running PostgreSQL with kerberos authentication configured
-* A test-user client for exploring and testing various functionalities
+* A test-client for exploring and testing various functionalities
 
 ``` 
-                -----------------
-               |    dns-server   |
-               |   192.168.60.5  |
-                -----------------
+                 ----------------
+                |   dns-server   |
+                |  192.168.60.5  |
+                 ----------------
                          |
                  ----------------
                 |   ipa-server   |
@@ -27,12 +27,16 @@ The goal was to set up a very basic infrastructure capable of managing identitie
     ----------------     |      ----------------
                          |      
                  ---------------
-                |   test-user   |
+                |  test-client  |
                 |  192.168.60.8 |
                  ---------------
 
 ```
 *IP addresses and hostnames modeled after the ```Vagrantfile```*
+
+###  Limitations
+* ipa-client-automount configuration for some reason makes sshd refuse ansible connections
+* Yet to implement automatic home directory creation whenever a new user is added to IPA
 
 ## Prerequisites
 
