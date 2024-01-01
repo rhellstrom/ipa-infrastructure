@@ -1,0 +1,44 @@
+---
+- name: Update packages and nameserver
+  hosts: test-client
+  become: true
+
+  pre_tasks:
+    - name: Update packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Add IPA-server to /etc/resolv.conf
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.60.4"
+        insertafter: '^search lan ipa\.test.*$'
+        state: present
+        
+    - name: Make changes to /etc/resolv persist
+      ansible.builtin.copy:
+        content: |
+          [main]
+          dns=none
+        dest: /etc/NetworkManager/conf.d/90-dns-none.conf
+
+    - name: Enable and start rpc-gssd, nfs-idmapd, rpcbind services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - rpc-gssd
+        - nfs-idmapd
+        - rpcbind
+
+  roles:
+    - role: freeipa_client
+
+  # tasks:
+  #   - name: Run ipa-client-automount
+  #     ansible.builtin.shell: ipa-client-automount --unattended
+  #     register: ipa_client_automount_output
+  #     failed_when: ipa_client_automount_output.rc != 0 and ipa_client_automount_output.rc != 3
+

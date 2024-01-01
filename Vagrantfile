@@ -51,11 +51,11 @@ Vagrant.configure("2") do |config|
     end
 
     # Simple host for testing
-    config.vm.define "test-user" do |user|
-      user.vm.hostname = "test-user.ipa.test"
-      user.vm.network "private_network", ip: "192.168.60.8"
+    config.vm.define "test-client" do |client|
+      client.vm.hostname = "test-client.ipa.test"
+      client.vm.network "private_network", ip: "192.168.60.8"
 
-      user.vm.provider "virtualbox" do |vb|
+      client.vm.provider "virtualbox" do |vb|
         vb.memory = 2048
         vb.cpus = 2
       end
