@@ -21,13 +21,29 @@
   vars_files:
     - vars.yml
 
-  tasks: 
-    - name: Create home directory for user {{ create_username }}
+  tasks:
+    - name: Create home directory using mkhomedir_helper
+      ansible.builtin.command: mkhomedir_helper {{ create_username }}
+      register: mkhomedir_result
+
+    - name: Move home directory to /export/home
+      ansible.builtin.command: mv /home/{{ create_username }}/ /export/home/
+      when: mkhomedir_result.rc == 0
+
+    - name: Set permissions for /export/home/{{ create_username }}
       ansible.builtin.file:
-        path: "/export/home/{{ create_username }}"
-        state: directory
-        mode: '0700'
-      when: create_home_dir
+        path: /export/home/{{ create_username }}
+        mode: "0700"
+      when: mkhomedir_result.rc == 0
+
+    - name: Create README.txt with content
+      ansible.builtin.copy:
+        content: "Welcome\n"
+        dest: /export/home/{{ create_username }}/README.txt
+        mode: "0600"
+        owner: "{{ create_username }}"
+        group: "{{ create_username }}"
+      when: mkhomedir_result.rc == 0
 
 - name: Add a PSQL role for the user
   hosts: db-server
