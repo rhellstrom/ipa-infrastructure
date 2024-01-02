@@ -3,3 +3,4 @@
 - ansible.builtin.import_playbook: playbooks/ipa-server/main.yml
 - ansible.builtin.import_playbook: playbooks/file-server/main.yml
 - ansible.builtin.import_playbook: playbooks/db-server/main.yml
+- ansible.builtin.import_playbook: playbooks/test-client/main.yml
