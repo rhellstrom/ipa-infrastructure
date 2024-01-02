@@ -1,0 +1,42 @@
+---
+- name: Playbook for IPA user creation
+  hosts: ipa-server
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Add IPA user
+      freeipa.ansible_freeipa.ipauser:
+        ipaadmin_password: "{{ admin_password }}"
+        name: "{{ create_username }}"
+        first: "{{ create_firstname }}"
+        last: "{{ create_lastname }}"
+        password: "{{ create_password }}"
+        update_password: on_create
+
+- name: Playbook for IPA user creation
+  hosts: file-server
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks: 
+    - name: Create home directory for user {{ create_username }}
+      ansible.builtin.file:
+        path: "/export/home/{{ create_username }}"
+        state: directory
+        mode: '0700'
+      when: create_home_dir
+
+- name: Add a PSQL role for the user
+  hosts: db-server
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create PostgreSQL role using shell
+      ansible.builtin.shell: >
+        sudo -u postgres psql -c "CREATE USER {{ create_username }} LOGIN;"
+      when: create_psql_role

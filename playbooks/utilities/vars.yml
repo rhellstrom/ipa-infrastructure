@@ -1,0 +1,10 @@
+---
+# Variables for user creation
+create_username: test
+create_firstname: test
+create_lastname: test
+create_password: testtest
+create_psql_role: true
+create_home_dir: true
+
+admin_password: adminpass
