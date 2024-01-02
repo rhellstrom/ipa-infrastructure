@@ -3,7 +3,7 @@
   hosts: file-server
   become: true
 
-  tasks:
+  pre_tasks:
     - name: Update packages
       ansible.builtin.dnf:
         name: "*"
@@ -16,10 +16,6 @@
         insertafter: '^search lan ipa\.test.*$'
         state: present
 
-- name: Add services to firewalld
-  hosts: file-server
-  become: true
-  tasks:
     - name: Add services to firewall
       ansible.posix.firewalld:
         service: "{{ item }}"
@@ -29,3 +25,6 @@
         - nfs
         - mountd
         - rpc-bind
+
+  roles:
+    - role: freeipa_client

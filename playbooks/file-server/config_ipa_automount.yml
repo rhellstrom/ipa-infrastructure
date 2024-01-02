@@ -7,7 +7,7 @@
       freeipa.ansible_freeipa.ipaautomountmap:
         ipaadmin_password: adminpass
         automountlocation: "default"
-        name: "auto.home"  
+        name: "auto.home"
         mount: "/home"
         state: present
 

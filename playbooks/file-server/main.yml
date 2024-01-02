@@ -4,7 +4,6 @@
   become: true
 
 - ansible.builtin.import_playbook: update_configure_system.yml
-- ansible.builtin.import_playbook: install_ipa_client.yml
 - ansible.builtin.import_playbook: config_ipa_nfs.yml
 - ansible.builtin.import_playbook: config_nfs.yml
 - ansible.builtin.import_playbook: config_ipa_automount.yml
