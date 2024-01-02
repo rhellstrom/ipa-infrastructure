@@ -16,6 +16,13 @@
         insertafter: '^search lan ipa\.test.*$'
         state: present
 
+    - name: Make changes to /etc/resolv persist
+      ansible.builtin.copy:
+        content: |
+          [main]
+          dns=none
+        dest: /etc/NetworkManager/conf.d/90-dns-none.conf
+
 - name: Enable and configure firewalld
   hosts: file-server
   become: true
