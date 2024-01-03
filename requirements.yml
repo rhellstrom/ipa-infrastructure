@@ -2,3 +2,5 @@
 collections:
   - name: freeipa.ansible_freeipa
     source: https://galaxy.ansible.com
+roles:
+  - name: geerlingguy.postgres
