@@ -55,5 +55,6 @@ With a valid kerberos ticket obtained through ```kinit <username>``` or simply l
 * Access your own automounting /home folder on the NFS file server
 
 ##  Limitations
-* ipa-client-automount configuration for some reason makes sshd refuse ansible connections.
+* Automounting /home makes authorized_keys inaccessible to Ansible
+  * Temporarily bypassed by supplying password until I figure out a solution
 * Yet to implement automatic home directory creation whenever a new user is added to IPA
